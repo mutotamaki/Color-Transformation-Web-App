@@ -47,15 +47,11 @@ def apply_color_transform(normalized_array, transform_matrix):
     
     return transformed_array
 
-# 変換行列（例: RGBの順序を入れ替える）
-transform_matrix = np.array([
-    [0, 0, 1],  # 赤 -> 青
-    [0, 1, 0],  # 緑 -> 緑（そのまま）
-    [1, 0, 0]   # 青 -> 赤
-])
+# 変換行列（3×3のランダム行列を生成）
+transform_matrix = np.random.rand(3, 3)
 
 # 使用例
-image_path = '/Users/iori/file_folder/program/pokemonn/a/image/zenigame.png'
+image_path = 'image/zenigame.png'
 normalized_array, size = image_to_normalized_vector(image_path)
 transformed_array = apply_color_transform(normalized_array, transform_matrix)
 transformed_image = normalized_vector_to_image(transformed_array, size)
