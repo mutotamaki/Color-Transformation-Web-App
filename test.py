@@ -1,13 +1,11 @@
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
+import gradio as gr
 
-def image_to_normalized_vector(image_path):
-    # 画像を開く
-    img = Image.open(image_path)
+def image_to_normalized_vector(image):
     
     # 画像をRGB形式に変換（必要であれば）
-    img = img.convert('RGB')
+    img = image.convert('RGB')
     
     # 画像データをNumPy配列に変換
     img_array = np.array(img)
@@ -50,13 +48,16 @@ def apply_color_transform(normalized_array, transform_matrix):
 # 変換行列（3×3のランダム行列を生成）
 transform_matrix = np.random.rand(3, 3)
 
-# 使用例
-image_path = 'image/zenigame.png'
-normalized_array, size = image_to_normalized_vector(image_path)
-transformed_array = apply_color_transform(normalized_array, transform_matrix)
-transformed_image = normalized_vector_to_image(transformed_array, size)
+def process_image(image):
+    normalized_array, size = image_to_normalized_vector(image)
+    transformed_array = apply_color_transform(normalized_array, transform_matrix)
+    transformed_image = normalized_vector_to_image(transformed_array, size)
+    return transformed_image
 
-# 画像を表示
-plt.imshow(transformed_image)
-plt.axis('off')  # 軸を表示しない
-plt.show()
+iface = gr.Interface(
+    fn=process_image,
+    inputs=gr.Image(type="pil"),
+    outputs="image"
+)
+
+iface.launch()
